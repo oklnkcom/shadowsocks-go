@@ -9,7 +9,7 @@ import (
 
 const text = "Don't tell me the moon is shining; show me the glint of light on broken glass."
 
-func testCiphter(t *testing.T, c *Cipher, msg string) {
+func testCipher(t *testing.T, c *Cipher, msg string) {
 	n := len(text)
 	cipherBuf := make([]byte, n)
 	originTxt := make([]byte, n)
@@ -51,7 +51,7 @@ func testBlockCipher(t *testing.T, method string) {
 	if err = cipher.initDecrypt(iv); err != nil {
 		t.Error(method, "initDecrypt:", err)
 	}
-	testCiphter(t, cipher, method)
+	testCipher(t, cipher, method)
 
 	iv, err = cipherCopy.initEncrypt()
 	if err != nil {
@@ -60,7 +60,7 @@ func testBlockCipher(t *testing.T, method string) {
 	if err = cipherCopy.initDecrypt(iv); err != nil {
 		t.Error(method, "copy initDecrypt:", err)
 	}
-	testCiphter(t, cipherCopy, method+" copy")
+	testCipher(t, cipherCopy, method+" copy")
 }
 
 func TestAES128CFB(t *testing.T) {
@@ -93,6 +93,10 @@ func TestDES(t *testing.T) {
 
 func TestRC4MD5(t *testing.T) {
 	testBlockCipher(t, "rc4-md5")
+}
+
+func TestRC4MD56(t *testing.T) {
+	testBlockCipher(t, "rc4-md5-6")
 }
 
 func TestChaCha20(t *testing.T) {
@@ -164,6 +168,10 @@ func BenchmarkRC4MD5Init(b *testing.B) {
 	benchmarkCipherInit(b, "rc4-md5")
 }
 
+func BenchmarkRC4MD56Init(b *testing.B) {
+	benchmarkCipherInit(b, "rc4-md5-5")
+}
+
 func BenchmarkChaCha20Init(b *testing.B) {
 	benchmarkCipherInit(b, "chacha20")
 }
@@ -230,6 +238,10 @@ func BenchmarkDESEncrypt(b *testing.B) {
 
 func BenchmarkRC4MD5Encrypt(b *testing.B) {
 	benchmarkCipherEncrypt(b, "rc4-md5")
+}
+
+func BenchmarkRC4MD56Encrypt(b *testing.B) {
+	benchmarkCipherEncrypt(b, "rc4-md5-6")
 }
 
 func BenchmarkChacha20Encrypt(b *testing.B) {
@@ -303,6 +315,10 @@ func BenchmarkDESDecrypt(b *testing.B) {
 
 func BenchmarkRC4MD5Decrypt(b *testing.B) {
 	benchmarkCipherDecrypt(b, "rc4-md5")
+}
+
+func BenchmarkRC4MD56Decrypt(b *testing.B) {
+	benchmarkCipherDecrypt(b, "rc4-md5-6")
 }
 
 func BenchmarkChaCha20Decrypt(b *testing.B) {
